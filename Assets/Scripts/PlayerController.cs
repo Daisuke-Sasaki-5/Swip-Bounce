@@ -18,6 +18,12 @@ public class PlayerController : MonoBehaviour
         if(rb.linearVelocity.magnitude < 0.1f)
         {
             inputManager.SetCanShoot(true);
+
+            // 全ショット使い切っていたら
+            if(GameManager.instance.IsShotEmpty())
+            {
+                GameManager.instance.GameOver();
+            }
         }
 
 #if UNITY_EDITOR
@@ -30,6 +36,16 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = Vector2.zero;
 
             rb.AddForce(new Vector2(1, 1).normalized * power, ForceMode2D.Impulse);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+
+        if (enemy != null)
+        {
+            enemy.TakeDamage(1);
         }
     }
 };

@@ -108,15 +108,17 @@ public class MobileInputVisualizer : MonoBehaviour
     {
         if (!canShoot) return;
 
-        Vector2 diff = currentPosition - startPosition;
+        Vector2 diff = startPosition - currentPosition;
 
-        Vector2 force = Vector2.ClampMagnitude(diff,200f * lanchPower);
+        Vector2 force = Vector2.ClampMagnitude(diff,200f) * lanchPower;
 
         playerRb.linearVelocity = Vector2.zero;
 
         playerRb.AddForce(force,ForceMode2D.Impulse);
 
         canShoot = false;
+
+        GameManager.instance.UseShot();
     }
 
     void OnGUI()
