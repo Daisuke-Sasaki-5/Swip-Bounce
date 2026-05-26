@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float power = 10f;
     [SerializeField] private MobileInputVisualizer inputManager;
 
+    private float stopTimer = 0f;
+    [SerializeField] private float stopTime = 0.3f;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -15,27 +18,21 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(rb.linearVelocity.magnitude < 0.1f)
+        if (rb.linearVelocity.magnitude < 0.1f)
         {
-            inputManager.SetCanShoot(true);
+            stopTimer += Time.deltaTime;
 
-            // 全ショット使い切っていたら
-            if(GameManager.instance.IsShotEmpty())
+            if (stopTimer >= stopTime)
             {
-                GameManager.instance.GameOver();
+
+                inputManager.SetCanShoot(true);
+
+                // 全ショット使い切っていたら
+                if (GameManager.instance.IsShotEmpty())
+                {
+                    GameManager.instance.GameOver();
+                }
             }
-        }
-
-#if UNITY_EDITOR
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
-
-#else
-            if(Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
-#endif
-        {
-            rb.linearVelocity = Vector2.zero;
-
-            rb.AddForce(new Vector2(1, 1).normalized * power, ForceMode2D.Impulse);
         }
     }
 

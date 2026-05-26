@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
 
         PlayerPrefs.SetInt("Score",GetScore());
 
-        FadeManager.instance.FadeToScene("ResultScene");
+        FadeManager.instance.FadeToScene("Result");
     }
 
     private void OnEnable()
@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour
     public void BackTitle()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("TitleScene");
+        SceneManager.LoadScene("Title");
     }
 
     public void OnEnemyDefeated()

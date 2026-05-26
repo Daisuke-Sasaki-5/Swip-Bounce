@@ -130,11 +130,15 @@ public class MobileInputVisualizer : MonoBehaviour
 
         Vector2 diff = startPosition - currentPosition;
 
-        Vector2 force = Vector2.ClampMagnitude(diff,200f) * lanchPower;
+        if (diff.magnitude < 50f) return;
+
+        diff = Vector2.ClampMagnitude(diff, 200f);
+
+        Vector2 force = diff * lanchPower;
 
         playerRb.linearVelocity = Vector2.zero;
 
-        playerRb.AddForce(force,ForceMode2D.Impulse);
+        playerRb.AddForce(force, ForceMode2D.Impulse);
 
         canShoot = false;
 
@@ -230,6 +234,12 @@ public class MobileInputVisualizer : MonoBehaviour
     public void EnableInput()
     {
         ignoreNextRelease = true;
+
+        isTouching = false;
+
+        startPosition = Vector2.zero;
+        currentPosition = Vector2.zero;
+
         StartCoroutine(EnableInputCoroutine());
     }
 
@@ -237,7 +247,8 @@ public class MobileInputVisualizer : MonoBehaviour
     {
         canInput = false;
 
-        yield return null; // 1フレーム待つ
+        yield return null; // 2フレーム待つ
+        yield return null; 
 
         canInput = true;
     }

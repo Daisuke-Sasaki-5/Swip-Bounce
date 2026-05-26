@@ -64,6 +64,6 @@ public class ResultManager : MonoBehaviour
         Time.timeScale = 1;
 
         // タイトルシーンをロード
-        SceneManager.LoadScene("TitleScene");
+        SceneManager.LoadScene("Title");
     }
 }
