@@ -19,8 +19,13 @@ public class GameManager : MonoBehaviour
 
     private int enemyCount;
 
+    [Header("最大ショット回数")]
     [SerializeField] private int maxShotCount = 5;
     private int currentShotCount;
+
+    [Header("スコアとボーナス")]
+    [SerializeField] private int enemyScore = 100;
+    [SerializeField] private int remainShotBonus = 500;
 
     private void Awake()
     {
@@ -63,6 +68,9 @@ public class GameManager : MonoBehaviour
         isStarted = false;
         isGameOver= false;
         score = 0f;
+        currentShotCount = 0;
+
+        UIManager.Instance.ShowStartUI(true);
 
         // ゲーム停止中
         Time.timeScale = 0f;
@@ -83,8 +91,6 @@ public class GameManager : MonoBehaviour
 
             return;
         }
-
-        score += Time.deltaTime * 10f;
     }
 
     public int GetScore()
@@ -95,16 +101,26 @@ public class GameManager : MonoBehaviour
     private void StartGame()
     {
         isStarted = true;
+
+        UIManager.Instance.ShowStartUI(false);
+
         Time.timeScale = 1f;
 
         startTiem = Time.time;
+
+        FindObjectOfType<MobileInputVisualizer>().EnableInput();
     }
 
     public void TryClear()
     {
         Debug.Log("クリア");
-        clearTime = Time.time - startTiem;
-        PlayerPrefs.SetFloat("ClearTime", clearTime);
+
+        int remainShot = maxShotCount - currentShotCount;
+
+        score += remainShot * remainShotBonus;
+
+        PlayerPrefs.SetInt("Score",GetScore());
+
         FadeManager.instance.FadeToScene("ResultScene");
     }
 
@@ -145,6 +161,7 @@ public class GameManager : MonoBehaviour
         isStarted = false;
 
         Time.timeScale = 0f;
+        UIManager.Instance.ShowGameOver(GetScore());
     }
 
     public void Replay()
@@ -163,6 +180,8 @@ public class GameManager : MonoBehaviour
     {
         enemyCount--;
 
+        score += enemyScore;
+
         if(enemyCount <= 0)
         {
             TryClear();
@@ -177,5 +196,10 @@ public class GameManager : MonoBehaviour
     public bool IsShotEmpty()
     {
         return currentShotCount >= maxShotCount;
+    }
+
+    public int GetRemainShot()
+    {
+        return maxShotCount - currentShotCount;
     }
 }

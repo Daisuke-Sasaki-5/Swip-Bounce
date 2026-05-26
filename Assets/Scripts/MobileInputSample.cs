@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 using UnityEngine.InputSystem;
@@ -23,6 +25,8 @@ public class MobileInputVisualizer : MonoBehaviour
     [SerializeField] float lanchPower = 0.05f;
 
     private bool canShoot = true;
+    private bool canInput = false;
+    private bool ignoreNextRelease = false;
 
     void OnEnable()
     {
@@ -64,6 +68,14 @@ public class MobileInputVisualizer : MonoBehaviour
 
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
+
+            if(ignoreNextRelease)
+            {
+                ignoreNextRelease = false;
+                isTouching = false;
+                return;
+            }
+
             currentPosition = Mouse.current.position.ReadValue();
 
             CheckGesture();
@@ -96,6 +108,12 @@ public class MobileInputVisualizer : MonoBehaviour
 
         if (touch.phase == UnityEngine.InputSystem.TouchPhase.Ended)
         {
+            if (ignoreNextRelease)
+            {
+                ignoreNextRelease = false;
+                isTouching = false;
+                return;
+            }
             currentPosition = touch.screenPosition;
 
             CheckGesture();
@@ -106,6 +124,8 @@ public class MobileInputVisualizer : MonoBehaviour
 
     void CheckGesture()
     {
+        if (!canInput) return;
+
         if (!canShoot) return;
 
         Vector2 diff = startPosition - currentPosition;
@@ -205,5 +225,20 @@ public class MobileInputVisualizer : MonoBehaviour
     public void SetCanShoot(bool value)
     {
         canShoot = value;
+    }
+
+    public void EnableInput()
+    {
+        ignoreNextRelease = true;
+        StartCoroutine(EnableInputCoroutine());
+    }
+
+    private IEnumerator EnableInputCoroutine()
+    {
+        canInput = false;
+
+        yield return null; // 1ÉtÉåÅ[ÉÄë“Ç¬
+
+        canInput = true;
     }
 }
