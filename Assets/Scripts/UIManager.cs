@@ -49,6 +49,7 @@ public class UIManager : MonoBehaviour
     {
         gameOverPanel.SetActive(true);
         scoreText.gameObject.SetActive(false);
+        shotText.gameObject.SetActive(false);
 
         resultScoreText.text = "Score:" + score;
     }

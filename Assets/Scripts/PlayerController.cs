@@ -11,6 +11,12 @@ public class PlayerController : MonoBehaviour
     private float stopTimer = 0f;
     [SerializeField] private float stopTime = 0.3f;
 
+    [SerializeField] private TrailRenderer trailRenderer;
+
+    [Header("ƒqƒbƒgSE")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip hitSE;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -34,6 +40,8 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+
+        trailRenderer.emitting = rb.linearVelocity.magnitude > 0.1f;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -42,6 +50,8 @@ public class PlayerController : MonoBehaviour
 
         if (enemy != null)
         {
+            audioSource.PlayOneShot(hitSE);
+
             enemy.TakeDamage(1);
         }
     }
