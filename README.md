@@ -10,4 +10,5 @@
 # 工夫した点
 * 物理挙動をUnityの機能を使って搭載した
 
-<img width="2880" height="1704" alt="image" src="https://github.com/user-attachments/assets/5dda0eef-7499-4fa1-82c8-47d767e2a408" />
+<img width="791" height="1402" alt="スクリーンショット 2026-05-28 180122" src="https://github.com/user-attachments/assets/fab01978-7ce0-493a-b65e-3f1d1aaee8c2" />
+
