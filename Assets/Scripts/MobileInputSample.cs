@@ -24,6 +24,9 @@ public class MobileInputVisualizer : MonoBehaviour
     [Header("î≠éÀÉpÉèÅ[")]
     [SerializeField] float lanchPower = 0.05f;
 
+    [Header("ñÓàÛ")]
+    [SerializeField] private Transform arrow;
+
     private bool canShoot = true;
     private bool canInput = false;
     private bool ignoreNextRelease = false;
@@ -49,6 +52,26 @@ public class MobileInputVisualizer : MonoBehaviour
         UpdateTouchInput();
 
 #endif
+
+        if(isTouching )
+        {
+            arrow.gameObject.SetActive( true );
+            Vector2 diff = startPosition - currentPosition;
+
+            float angle = Mathf.Atan2 ( diff.y, diff.x ) * Mathf.Rad2Deg;
+
+            arrow.rotation = Quaternion.Euler(0, 0, angle);
+
+            arrow.position = playerRb.position;
+
+            float length = Mathf.Clamp(diff.magnitude * 0.1f, 0.5f, 2f);
+
+            arrow.localScale = new Vector3( length, 1f, 1f);
+        }
+        else
+        {
+            arrow.gameObject.SetActive ( false );
+        }
     }
 
     void UpdateMouseInput()
