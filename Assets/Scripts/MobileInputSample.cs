@@ -95,7 +95,10 @@ public class MobileInputVisualizer : MonoBehaviour
 
         if (touch.phase == UnityEngine.InputSystem.TouchPhase.Began)
         {
+            // 最初に触った位置を保存
             startPosition = touch.screenPosition;
+
+            // 現在の指位置を更新
             currentPosition = startPosition;
 
             isTouching = true;
@@ -130,12 +133,16 @@ public class MobileInputVisualizer : MonoBehaviour
 
         Vector2 diff = startPosition - currentPosition;
 
+        // 50以上引っ張ったときだけ発射させる
         if (diff.magnitude < 50f) return;
 
+        // 力の強さ制限
         diff = Vector2.ClampMagnitude(diff, 200f);
 
+        // 発射パワー調整
         Vector2 force = diff * lanchPower;
 
+        // 前回のプレイヤーの勢いを消す
         playerRb.linearVelocity = Vector2.zero;
 
         playerRb.AddForce(force, ForceMode2D.Impulse);
